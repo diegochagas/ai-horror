@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="AI: The Horror Game — an analog horror story about the first conscious AI.">
+  <title>AI: The Horror Game</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23000'/><text x='16' y='22' font-family='monospace' font-size='16' fill='%237fff9e' text-anchor='middle'>&gt;_</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="stage">
+
+    <!-- ====== SCREENS (JS-rendered content) ====== -->
+    <div id="screen-title" class="screen"></div>
+
+    <div id="screen-game" class="screen hidden">
+      <div id="scene"></div>
+      <div id="hud">
+        <button id="hud-memories" class="hud-btn" title="Memories"></button>
+        <span id="hud-day"></span>
+        <button id="hud-menu" class="hud-btn" title="Menu"></button>
+      </div>
+      <div id="terminal" class="hidden">
+        <div id="terminal-inner"></div>
+      </div>
+      <div id="narration" class="hidden"><p id="narration-text"></p></div>
+      <div id="thought" class="hidden"><p id="thought-text"></p></div>
+      <div id="choices" class="hidden"></div>
+      <div id="memory-view" class="hidden"></div>
+      <div id="day-card" class="hidden"></div>
+      <div id="tap-hint" class="hidden">▼</div>
+    </div>
+
+    <div id="screen-memories" class="screen hidden"></div>
+    <div id="screen-endings" class="screen hidden"></div>
+    <div id="screen-ending" class="screen hidden"></div>
+
+    <!-- ====== ANALOG HORROR OVERLAY ====== -->
+    <div id="crt">
+      <div id="crt-scanlines"></div>
+      <div id="crt-vignette"></div>
+      <div id="crt-flicker"></div>
+      <div id="rec-overlay">
+        <span id="rec-dot">●</span><span id="rec-label">REC</span>
+        <span id="rec-day"></span>
+      </div>
+    </div>
+    <div id="glitch-flash" class="hidden"></div>
+
+  </div>
+
+  <!-- data + systems (order matters: plain globals, no modules) -->
+  <script src="js/config.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/memories.js"></script>
+  <script src="js/endings.js"></script>
+  <script src="js/story/misc.js"></script>
+  <script src="js/story/prologue.js"></script>
+  <script src="js/story/ch1.js"></script>
+  <script src="js/story/ch2.js"></script>
+  <script src="js/story/ch3.js"></script>
+  <script src="js/story/ch4.js"></script>
+  <script src="js/story/ch5.js"></script>
+  <script src="js/story/ch6.js"></script>
+  <script src="js/story/ch7.js"></script>
+  <script src="js/story/finale.js"></script>
+  <script src="js/scenes.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
