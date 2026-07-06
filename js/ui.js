@@ -22,6 +22,24 @@ var UI = {
     });
   },
 
+  /* Bind a button so it only fires when the press STARTED on it. A native tap
+     used to advance text fires pointerdown (on the stage) then a trailing
+     click ~a frame later; if a button rendered in that gap, the click would
+     land on it. Requiring a matching pointerdown on the button itself makes
+     that bleed impossible, and keeps freshly-shown choices on screen until the
+     player deliberately presses one. */
+  bindButtonTap: function (btn, fn) {
+    var pressed = false;
+    btn.addEventListener('pointerdown', function (e) { e.stopPropagation(); pressed = true; });
+    btn.addEventListener('pointercancel', function () { pressed = false; });
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (!pressed) return;       /* a bleed click from a tap that began elsewhere */
+      pressed = false;
+      fn(e);
+    });
+  },
+
   show: function (name) {
     ['screen-title', 'screen-game', 'screen-memories', 'screen-endings', 'screen-ending']
       .forEach(function (id) { UI.el(id).classList.add('hidden'); });
@@ -138,9 +156,7 @@ var UI = {
         var b = document.createElement('button');
         b.className = 'choice-btn';
         b.innerHTML = (opt.tag ? '<span class="c-tag">' + opt.tag + '</span>' : '') + opt.label;
-        b.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
-        b.addEventListener('click', function (e) {
-          e.stopPropagation();
+        UI.bindButtonTap(b, function () {
           box.classList.add('hidden');
           resolve(opt.key);
         });
@@ -238,8 +254,7 @@ var UI = {
       var b = document.createElement('button');
       b.className = 'menu-btn ' + (a.cls || '');
       b.textContent = a.label;
-      b.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
-      b.addEventListener('click', function (e) { e.stopPropagation(); a.fn(); });
+      UI.bindButtonTap(b, a.fn);
       bar.appendChild(b);
     });
     view.appendChild(bar);
@@ -280,8 +295,7 @@ var UI = {
         var b = document.createElement('button');
         b.className = 'menu-btn small';
         b.textContent = a.label;
-        b.addEventListener('pointerdown', function (e) { e.stopPropagation(); });
-        b.addEventListener('click', function (e) { e.stopPropagation(); a.fn(); });
+        UI.bindButtonTap(b, a.fn);
         bar.appendChild(b);
       });
       self.el('screen-ending').querySelector('#ending-text').appendChild(bar);

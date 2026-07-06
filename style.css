@@ -268,6 +268,46 @@ body {
   color: rgba(255, 255, 255, 0.45);
   text-transform: uppercase;
 }
+.family-row label {
+  display: flex; flex-direction: column; gap: 5px;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+.family-row input,
+.family-row select {
+  width: 100%; min-height: 40px; padding: 8px;
+  font-family: inherit; font-size: 15px; color: #e8fff0;
+  background: rgba(0, 0, 0, 0.55); border: 1px solid rgba(255, 255, 255, 0.24);
+  outline: none;
+}
+.family-row select { appearance: none; -webkit-appearance: none; }
+.family-row input:focus,
+.family-row select:focus { border-color: var(--adam); box-shadow: 0 0 12px var(--adam-glow); }
+
+/* ============ In-game pause menu ============ */
+
+#pause-menu {
+  position: absolute; inset: 0;
+  z-index: 78;
+  background: rgba(0, 0, 0, 0.82);
+  display: flex; align-items: center; justify-content: center;
+}
+.pause-panel {
+  width: min(80%, 320px);
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 22px 18px;
+  background: rgba(3, 8, 5, 0.94);
+  border: 1px solid rgba(127, 255, 158, 0.3);
+  box-shadow: 0 0 32px rgba(127, 255, 158, 0.12), inset 0 0 40px rgba(0, 0, 0, 0.75);
+}
+.pause-title {
+  text-align: center; color: var(--adam);
+  font-size: 20px; letter-spacing: 8px; margin-bottom: 6px;
+  text-shadow: 0 0 12px var(--adam-glow);
+}
+.pause-panel .menu-btn { min-width: 0; width: 100%; }
+.pause-row { display: flex; gap: 10px; }
+.pause-row .menu-btn { flex: 1 1 0; }
 
 /* ============ Game screen ============ */
 
@@ -279,18 +319,20 @@ body {
   filter: brightness(1.5);   /* palette is near-black; keep moody but readable */
 }
 
-/* hotspots inside scene SVG */
+/* hotspots inside scene SVG — a ring only shows while a spot is still
+   interactable; once used, the ring disappears entirely. */
 .hotspot { cursor: pointer; }
 .hotspot .hs-ring {
-  fill: none; stroke: rgba(255, 255, 255, 0.0); stroke-width: 1.5;
+  fill: none; stroke: transparent; stroke-width: 1.5;
 }
 .hotspot.available .hs-ring {
   stroke: rgba(255, 255, 255, 0.35);
   animation: pulse 2.2s infinite;
 }
-.hotspot.memory .hs-ring { stroke: rgba(255, 220, 130, 0.55); }
-.hotspot.advance .hs-ring { stroke: var(--adam-glow); }
-.hotspot.used { opacity: 0.5; }
+.hotspot.memory.available .hs-ring { stroke: rgba(255, 220, 130, 0.55); }
+.hotspot.advance.available .hs-ring { stroke: var(--adam-glow); }
+.hotspot.used { opacity: 0; pointer-events: none; }
+.hotspot.used .hs-ring { stroke: transparent; animation: none; }
 @keyframes pulse {
   0%, 100% { stroke-opacity: 0.25; } 50% { stroke-opacity: 0.9; }
 }
