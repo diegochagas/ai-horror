@@ -3,6 +3,16 @@ var CONFIG = {
   VERSION: '1.0.0',
   SAVE_KEY: 'aihg-save-v1',
 
+  DEFAULT_CAST: {
+    playerName: 'Daniel',
+    maxFamily: 6,
+    family: [
+      { role: 'clara', owner: 'clara', name: 'Clara', kinship: { en: 'wife', pt: 'esposa' } },
+      { role: 'alice', owner: 'alice', name: 'Alice', kinship: { en: 'daughter', pt: 'filha' } },
+      { role: 'marcos', owner: 'marcos', name: 'Marcos', kinship: { en: 'brother', pt: 'irmão' } }
+    ]
+  },
+
   /* Power gained per choice kind */
   POWER: { grant: 2, caution: 1, refuse: 0, eager: 1 },
 

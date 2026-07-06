@@ -9,10 +9,95 @@ var STATE = {
       endings: [],        /* ending ids ever reached          */
       deathsSeen: [],     /* death ending ids (for foreshadow) */
       memoriesSeen: [],   /* memory ids ever read              */
+      personalization: this.defaultPersonalization(),
       lang: null,
       muted: false,
       fastText: false
     };
+  },
+
+  defaultPersonalization: function () {
+    var cast = CONFIG.DEFAULT_CAST;
+    return {
+      version: 1,
+      playerName: cast.playerName,
+      playerNameSource: 'default', /* custom values are not asked again */
+      hasFamily: true,
+      familySource: 'default',     /* 'custom' or 'none' are not asked again */
+      familyCount: cast.family.length,
+      family: cast.family.map(function (m) {
+        return {
+          role: m.role,
+          owner: m.owner,
+          name: m.name,
+          kinship: { en: m.kinship.en, pt: m.kinship.pt },
+          source: 'default'
+        };
+      })
+    };
+  },
+
+  normalizePersonalization: function (src) {
+    var base = this.defaultPersonalization();
+    if (!src || typeof src !== 'object') return base;
+
+    function nonEmpty(value, fallback) {
+      return (typeof value === 'string' && value.trim()) ? value.trim() : fallback;
+    }
+    function source(value) {
+      return value === 'custom' ? 'custom' : 'default';
+    }
+    function defaultMember(i) {
+      var def = CONFIG.DEFAULT_CAST.family[i];
+      if (def) return def;
+      return {
+        role: 'relative' + (i + 1),
+        owner: 'relative' + (i + 1),
+        name: 'Relative ' + (i + 1),
+        kinship: { en: 'relative', pt: 'parente' }
+      };
+    }
+
+    base.playerName = nonEmpty(src.playerName, base.playerName);
+    base.playerNameSource = source(src.playerNameSource);
+
+    if (src.hasFamily === false || src.familySource === 'none') {
+      base.hasFamily = false;
+      base.familySource = 'none';
+      base.familyCount = 0;
+      base.family = [];
+      return base;
+    }
+
+    base.hasFamily = true;
+    base.familySource = source(src.familySource);
+
+    var requested = parseInt(src.familyCount, 10);
+    if (!isFinite(requested) || requested < 1) {
+      requested = Array.isArray(src.family) && src.family.length ? src.family.length : CONFIG.DEFAULT_CAST.family.length;
+    }
+    requested = Math.max(1, Math.min(CONFIG.DEFAULT_CAST.maxFamily, requested));
+
+    var family = Array.isArray(src.family) ? src.family : [];
+    base.family = [];
+    for (var i = 0; i < requested; i++) {
+      var def = defaultMember(i);
+      var item = family[i] || {};
+      var kin = item.kinship || {};
+      var defKin = def.kinship || { en: 'relative', pt: 'parente' };
+      base.family.push({
+        role: item.role || def.role,
+        owner: item.owner || def.owner,
+        name: nonEmpty(item.name, def.name),
+        kinship: {
+          en: nonEmpty(kin.en, defKin.en),
+          pt: nonEmpty(kin.pt, defKin.pt)
+        },
+        source: source(item.source)
+      });
+    }
+    base.familyCount = base.family.length;
+    return base;
   },
 
   newRun: function () {
@@ -128,5 +213,6 @@ var STATE = {
         this.run = d.run || null;
       }
     } catch (e) { /* corrupted save — start clean */ }
+    this.meta.personalization = this.normalizePersonalization(this.meta.personalization);
   }
 };

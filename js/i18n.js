@@ -14,8 +14,11 @@ var I18N = {
   /* pick a bilingual node */
   p: function (node) {
     if (node == null) return '';
-    if (typeof node === 'string') return node;
-    return node[this.lang] != null ? node[this.lang] : (node.en || '');
+    var text = typeof node === 'string' ? node : (node[this.lang] != null ? node[this.lang] : (node.en || ''));
+    if (typeof PERSONALIZATION !== 'undefined' && PERSONALIZATION.render) {
+      return PERSONALIZATION.render(text);
+    }
+    return text;
   },
 
   /* fixed UI string by key */

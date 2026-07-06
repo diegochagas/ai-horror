@@ -99,11 +99,17 @@ var MAIN = {
   },
 
   startGame: function (fresh) {
+    var begin = function () { ENGINE.start(fresh); };
     ENGINE.abandon();
     UI._tapResolve = null;
     UI.hideOverlays();
     UI.closeTerminal();
-    ENGINE.start(fresh);
+    UI.el('tap-hint').classList.add('hidden');
+    if (fresh && PERSONALIZATION.needsSetup()) {
+      PERSONALIZATION.runSetup(begin, function () { MAIN.showTitle(); });
+      return;
+    }
+    begin();
   }
 };
 

@@ -13,7 +13,7 @@ const vm = require('vm');
 
 const root = path.join(__dirname, '..');
 const files = [
-  'js/config.js', 'js/i18n.js', 'js/state.js', 'js/memories.js', 'js/endings.js',
+  'js/config.js', 'js/i18n.js', 'js/state.js', 'js/personalization.js', 'js/memories.js', 'js/endings.js',
   'js/scenes.js',
   'js/story/misc.js', 'js/story/prologue.js', 'js/story/ch1.js', 'js/story/ch2.js',
   'js/story/ch3.js', 'js/story/ch4.js', 'js/story/ch5.js', 'js/story/ch6.js',
@@ -25,7 +25,7 @@ vm.createContext(sandbox);
 for (const f of files) {
   vm.runInContext(fs.readFileSync(path.join(root, f), 'utf8'), sandbox, { filename: f });
 }
-const { CONFIG, I18N, STATE, MEMORIES, ENDINGS, SCENES, STORY } = sandbox;
+const { CONFIG, I18N, STATE, PERSONALIZATION, MEMORIES, ENDINGS, SCENES, STORY } = sandbox;
 
 const errors = [];
 const warn = [];
@@ -44,6 +44,7 @@ function walk(o, where) {
   for (const k of Object.keys(o)) walk(o[k], `${where}.${k}`);
 }
 walk(I18N.S, 'I18N.S');
+walk(PERSONALIZATION.copy, 'PERSONALIZATION.copy');
 walk(STORY, 'STORY');
 MEMORIES.items.forEach(m => { walk(m.title, `memory ${m.id}.title`); walk(m.body, `memory ${m.id}.body`); });
 ENDINGS.list.forEach(e => { walk(e.title, `ending ${e.id}.title`); e.lines.forEach((l, i) => walk(l, `ending ${e.id}.lines[${i}]`)); if (e.hint) walk(e.hint, `ending ${e.id}.hint`); });
