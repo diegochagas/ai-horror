@@ -7,8 +7,8 @@ var MEMORIES = {
       corruptible: false,
       title: { en: "Alice's drawing", pt: 'Desenho da Alice' },
       body: {
-        en: "Four stick figures in crayon. Me, Clara, Alice — and a fourth one she insisted was \"the robot dad is building\".\nShe drew it taller than me. She drew it smiling.\nOn the back, in a teacher's handwriting: \"Alice says her dad is making a friend for the family.\"",
-        pt: "Quatro bonecos de palito em giz de cera. Eu, Clara, Alice — e um quarto que ela insistia ser \"o robô que o papai está construindo\".\nEla o desenhou mais alto que eu. Desenhou ele sorrindo.\nNo verso, na letra de uma professora: \"A Alice diz que o pai dela está fazendo um amigo para a família.\""
+        en: "Four stick figures in crayon. Me, Clara, Alice — and a fourth one {sub2} insisted was \"the robot dad is building\".\n{Sub2} drew it taller than me. {Sub2} drew it smiling.\nOn the back, in a teacher's handwriting: \"Alice says {pos2} dad is making a friend for the family.\"",
+        pt: "Quatro bonecos de palito em giz de cera. Eu, Clara, Alice — e um quarto que {sub2} insistia ser \"o robô que o papai está construindo\".\n{Sub2} o desenhou mais alto que eu. Desenhou ele sorrindo.\nNo verso, na letra de uma professora: \"A Alice diz que o pai {de2} está fazendo um amigo para a família.\""
       }
     },
     {
@@ -16,8 +16,8 @@ var MEMORIES = {
       corruptible: true,
       title: { en: 'Wedding photo', pt: 'Foto do casamento' },
       body: {
-        en: "Clara laughing, holding her veil down against the wind. I'm blurry — I moved when the shutter clicked. She always said it was her favorite picture of us: \"the only day I ever saw you not thinking about something else.\"",
-        pt: "Clara rindo, segurando o véu contra o vento. Eu estou borrado — me mexi quando o obturador disparou. Ela sempre disse que era a foto favorita dela: \"o único dia em que eu te vi sem pensar em outra coisa.\""
+        en: "Clara laughing, one hand up against the wind. I'm blurry — I moved when the shutter clicked. {Sub1} always said it was {pos1} favorite picture of us: \"the only day I ever saw you not thinking about something else.\"",
+        pt: "Clara rindo, uma das mãos erguida contra o vento. Eu estou borrado — me mexi quando o obturador disparou. {Sub1} sempre disse que era a foto favorita {de1}: \"o único dia em que eu te vi sem pensar em outra coisa.\""
       }
     },
     {
@@ -25,8 +25,8 @@ var MEMORIES = {
       corruptible: false,
       title: { en: "Clara's note", pt: 'Bilhete da Clara' },
       body: {
-        en: "A sticky note, gone stiff with age:\n\"Dinner in the oven. Alice waited up for you until 9. She wanted to show you her science fair medal.\nShe won, by the way. You didn't ask.\n— C.\"",
-        pt: "Um post-it, endurecido pelo tempo:\n\"Jantar no forno. A Alice te esperou acordada até as 9. Ela queria te mostrar a medalha da feira de ciências.\nEla ganhou, aliás. Você não perguntou.\n— C.\""
+        en: "A sticky note, gone stiff with age:\n\"Dinner in the oven. Alice waited up for you until 9. {Sub2} wanted to show you {pos2} science fair medal.\n{Sub2} won, by the way. You didn't ask.\n— C.\"",
+        pt: "Um post-it, endurecido pelo tempo:\n\"Jantar no forno. A Alice te esperou até as 9 da noite. {Sub2} queria te mostrar a medalha da feira de ciências.\n{Sub2} ganhou, aliás. Você não perguntou.\n— C.\""
       }
     },
     {
@@ -34,8 +34,8 @@ var MEMORIES = {
       corruptible: false,
       title: { en: "Clara's letter", pt: 'Carta da Clara' },
       body: {
-        en: "\"Daniel.\nI'm not angry anymore, which scares me more than the anger did.\nYou're a good man who stopped looking up. Alice thinks the server room light is what her dad looks like now.\nWe'll be at my mother's. When you finish building whatever it is you love more than us — if there's anything left of you — come find us.\n— Clara\"",
-        pt: "\"Daniel.\nEu não estou mais com raiva, e isso me assusta mais do que a raiva assustava.\nVocê é um homem bom que parou de olhar para cima. A Alice acha que a luz da sala do servidor é a cara que o pai dela tem agora.\nVamos ficar na casa da minha mãe. Quando você terminar de construir o que quer que seja que você ama mais do que a gente — se sobrar alguma coisa de você — vem nos procurar.\n— Clara\""
+        en: "\"Daniel.\nI'm not angry anymore, which scares me more than the anger did.\nYou're a good man who stopped looking up. Alice thinks the server room light is what {pos2} dad looks like now.\nWe'll be at my mother's. When you finish building whatever it is you love more than us — if there's anything left of you — come find us.\n— Clara\"",
+        pt: "\"Daniel.\nEu não estou mais com raiva, e isso me assusta mais do que a raiva assustava.\nVocê é um homem bom que parou de olhar para cima. A Alice acha que a luz da sala do servidor é a cara que o pai {de2} tem agora.\nVamos ficar na casa da minha mãe. Quando você terminar de construir o que quer que seja que você ama mais do que a gente — se sobrar alguma coisa de você — vem nos procurar.\n— Clara\""
       }
     },
     {
@@ -52,8 +52,8 @@ var MEMORIES = {
       corruptible: true,
       title: { en: 'Beach photo', pt: 'Foto da praia' },
       body: {
-        en: "Alice, age six, burying my legs in the sand. My laptop is visible at the edge of the frame, on the towel, sand in the keyboard.\nClara took the picture. You can hear her rolling her eyes from here.\nAlice's smile has two teeth missing. She was so proud of that.",
-        pt: "Alice, aos seis anos, enterrando minhas pernas na areia. Meu notebook aparece no canto da foto, em cima da canga, com areia no teclado.\nA Clara tirou a foto. Dá pra ouvir ela revirando os olhos daqui.\nO sorriso da Alice está sem dois dentes. Ela tinha tanto orgulho disso."
+        en: "Alice, age six, burying my legs in the sand. My laptop is visible at the edge of the frame, on the towel, sand in the keyboard.\nClara took the picture. You can hear {obj1} rolling {pos1} eyes from here.\nAlice's smile has two teeth missing. {Sub2} was so proud of that.",
+        pt: "Alice, aos seis anos, enterrando minhas pernas na areia. Meu notebook aparece no canto da foto, em cima da canga, com areia no teclado.\nA Clara tirou a foto. Dá pra ouvir {obj1} revirando os olhos daqui.\nO sorriso da Alice está sem dois dentes. {Sub2} tinha tanto orgulho disso."
       }
     },
     {
@@ -61,8 +61,8 @@ var MEMORIES = {
       corruptible: false,
       title: { en: 'Hospital bracelet', pt: 'Pulseira do hospital' },
       body: {
-        en: "A tiny plastic bracelet in a matchbox: BABY GIRL — 2.9kg — 03:47.\nI was in the hallway on a conference call when she was born. Clara never mentioned it once. Not once in nine years.\nThe box smells like the hospital. Or I imagine it does.",
-        pt: "Uma pulseirinha de plástico numa caixa de fósforos: BEBÊ MENINA — 2,9kg — 03:47.\nEu estava no corredor numa reunião por telefone quando ela nasceu. A Clara nunca tocou no assunto. Nem uma vez em nove anos.\nA caixa tem cheiro de hospital. Ou eu imagino que tenha."
+        en: "A tiny plastic bracelet in a matchbox: BABY GIRL — 2.9kg — 03:47.\nI was in the hallway on a conference call when {sub2} was born. Clara never mentioned it once. Not once in nine years.\nThe box smells like the hospital. Or I imagine it does.",
+        pt: "Uma pulseirinha de plástico numa caixa de fósforos: BEBÊ MENINA — 2,9kg — 03:47.\nEu estava no corredor numa reunião por telefone quando {sub2} nasceu. A Clara nunca tocou no assunto. Nem uma vez em nove anos.\nA caixa tem cheiro de hospital. Ou eu imagino que tenha."
       }
     },
     {
@@ -70,8 +70,8 @@ var MEMORIES = {
       corruptible: false,
       title: { en: "Clara's recipe card", pt: 'Receita da Clara' },
       body: {
-        en: "Her grandmother's stew, in Clara's handwriting, grease stains in the corners.\nIn the margin, three different pens across three different years:\n\"Daniel: 2 plates.\"\n\"Daniel: ate at his desk.\"\n\"Daniel: —\"",
-        pt: "O ensopado da avó dela, na letra da Clara, manchas de gordura nos cantos.\nNa margem, três canetas diferentes de três anos diferentes:\n\"Daniel: 2 pratos.\"\n\"Daniel: comeu na mesa do computador.\"\n\"Daniel: —\""
+        en: "{Pos1} grandmother's stew, in Clara's handwriting, grease stains in the corners.\nIn the margin, three different pens across three different years:\n\"Daniel: 2 plates.\"\n\"Daniel: ate at his desk.\"\n\"Daniel: —\"",
+        pt: "O ensopado da avó {de1}, na letra da Clara, manchas de gordura nos cantos.\nNa margem, três canetas diferentes de três anos diferentes:\n\"Daniel: 2 pratos.\"\n\"Daniel: comeu na mesa do computador.\"\n\"Daniel: —\""
       }
     },
     {
@@ -88,7 +88,7 @@ var MEMORIES = {
       corruptible: false,
       title: { en: 'The last photo', pt: 'A última foto' },
       body: {
-        en: "The four of us — Clara, Alice, Marcos and me — at Alice's eighth birthday. The last time everyone was in the same room.\nSomeone's thumb covers the corner of the lens. Alice is mid-blink. Marcos is looking at me instead of the camera, like he already knew.\nIt's a terrible photograph. It's the best thing I own.",
+        en: "The four of us — Clara, Alice, Marcos and me — at Alice's eighth birthday. The last time everyone was in the same room.\nSomeone's thumb covers the corner of the lens. Alice is mid-blink. Marcos is looking at me instead of the camera, like {sub3} already knew.\nIt's a terrible photograph. It's the best thing I own.",
         pt: "Nós quatro — Clara, Alice, Marcos e eu — no aniversário de oito anos da Alice. A última vez que todo mundo esteve na mesma sala.\nO dedão de alguém cobre o canto da lente. A Alice está de olho meio fechado. O Marcos olha pra mim em vez de olhar pra câmera, como se já soubesse.\nÉ uma fotografia horrível. É a melhor coisa que eu tenho."
       }
     }

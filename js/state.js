@@ -30,6 +30,8 @@ var STATE = {
           role: m.role,
           owner: m.owner,
           name: m.name,
+          gender: m.gender,
+          slotGender: m.slotGender,
           kinship: { en: m.kinship.en, pt: m.kinship.pt },
           source: 'default'
         };
@@ -54,8 +56,13 @@ var STATE = {
         role: 'relative' + (i + 1),
         owner: 'relative' + (i + 1),
         name: 'Relative ' + (i + 1),
+        gender: 'n',
+        slotGender: 'n',
         kinship: { en: 'relative', pt: 'parente' }
       };
+    }
+    function gender(value, fallback) {
+      return (value === 'm' || value === 'f' || value === 'n') ? value : fallback;
     }
 
     base.playerName = nonEmpty(src.playerName, base.playerName);
@@ -89,6 +96,8 @@ var STATE = {
         role: item.role || def.role,
         owner: item.owner || def.owner,
         name: nonEmpty(item.name, def.name),
+        gender: gender(item.gender, def.gender || 'n'),
+        slotGender: def.slotGender || def.gender || 'n',
         kinship: {
           en: nonEmpty(kin.en, defKin.en),
           pt: nonEmpty(kin.pt, defKin.pt)

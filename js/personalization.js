@@ -2,6 +2,51 @@
 var PERSONALIZATION = {
   roleIndex: { clara: 0, alice: 1, marcos: 2 },
 
+  /* The written prose assumes these genders for the three story slots. A member
+     whose kinship has no clear gender falls back here so verb agreement (which
+     m<->f swaps never touch, but neutral 'they' would) always stays correct. */
+  slotGender: { clara: 'f', alice: 'f', marcos: 'm' },
+
+  /* Curated kinship options per slot (0 partner, 1 child, 2 sibling, 3+ any).
+     Each carries an explicit gender so adaptation never has to guess. */
+  KINSHIPS: {
+    partner: [
+      { g: 'f', en: 'wife', pt: 'esposa' },
+      { g: 'm', en: 'husband', pt: 'marido' },
+      { g: 'n', en: 'partner', pt: 'parceiro(a)' }
+    ],
+    child: [
+      { g: 'f', en: 'daughter', pt: 'filha' },
+      { g: 'm', en: 'son', pt: 'filho' },
+      { g: 'n', en: 'child', pt: 'filho(a)' }
+    ],
+    sibling: [
+      { g: 'f', en: 'sister', pt: 'irmã' },
+      { g: 'm', en: 'brother', pt: 'irmão' },
+      { g: 'n', en: 'sibling', pt: 'irmão(ã)' }
+    ],
+    any: [
+      { g: 'f', en: 'mother', pt: 'mãe' },
+      { g: 'm', en: 'father', pt: 'pai' },
+      { g: 'f', en: 'daughter', pt: 'filha' },
+      { g: 'm', en: 'son', pt: 'filho' },
+      { g: 'f', en: 'sister', pt: 'irmã' },
+      { g: 'm', en: 'brother', pt: 'irmão' },
+      { g: 'f', en: 'grandmother', pt: 'avó' },
+      { g: 'm', en: 'grandfather', pt: 'avô' },
+      { g: 'f', en: 'aunt', pt: 'tia' },
+      { g: 'm', en: 'uncle', pt: 'tio' },
+      { g: 'n', en: 'cousin', pt: 'primo(a)' },
+      { g: 'n', en: 'friend', pt: 'amigo(a)' }
+    ]
+  },
+
+  /* gender lookup for free-typed kinship words (EN + PT, accent-insensitive) */
+  KINSHIP_GENDER: {
+    f: ['wife', 'mother', 'mom', 'mum', 'mommy', 'daughter', 'sister', 'grandmother', 'grandma', 'granny', 'aunt', 'auntie', 'girlfriend', 'niece', 'esposa', 'mae', 'mamae', 'filha', 'irma', 'tia', 'namorada', 'sobrinha', 'companheira', 'parceira', 'mulher', 'madrinha', 'prima', 'amiga'],
+    m: ['husband', 'father', 'dad', 'daddy', 'son', 'brother', 'grandfather', 'grandpa', 'uncle', 'boyfriend', 'nephew', 'marido', 'pai', 'papai', 'filho', 'irmao', 'tio', 'namorado', 'sobrinho', 'companheiro', 'parceiro', 'homem', 'padrinho', 'primo', 'amigo']
+  },
+
   copy: {
     nameTitle: { en: 'What should ADAM call you?', pt: 'Como o ADAM deve te chamar?' },
     nameHint: {
@@ -34,6 +79,7 @@ var PERSONALIZATION = {
     },
     member: { en: 'Family member', pt: 'Familiar' },
     kinship: { en: 'Kinship', pt: 'Parentesco' },
+    otherKinship: { en: 'Other…', pt: 'Outro…' },
     name: { en: 'Name', pt: 'Nome' },
     saveFamily: { en: 'Save my family', pt: 'Salvar minha família' },
     cancel: { en: 'Cancel', pt: 'Cancelar' }
@@ -263,11 +309,37 @@ var PERSONALIZATION = {
 
       var kinLabel = document.createElement('label');
       kinLabel.textContent = this.uiText(this.copy.kinship);
-      var kinInput = document.createElement('input');
-      kinInput.type = 'text';
-      kinInput.maxLength = 28;
-      kinInput.value = this.uiText(def.kinship);
-      kinLabel.appendChild(kinInput);
+      var kinSelect = document.createElement('select');
+      var defText = this.uiText(def.kinship);
+      var matched = false;
+      this.slotKinships(i).forEach(function (opt) {
+        var o = document.createElement('option');
+        o.value = opt.en;
+        o.textContent = self.uiText({ en: opt.en, pt: opt.pt });
+        o.setAttribute('data-g', opt.g);
+        o.setAttribute('data-en', opt.en);
+        o.setAttribute('data-pt', opt.pt);
+        if (!matched && (opt.en === (def.kinship && def.kinship.en) || self.uiText({ en: opt.en, pt: opt.pt }) === defText)) {
+          o.selected = true; matched = true;
+        }
+        kinSelect.appendChild(o);
+      });
+      var customOpt = document.createElement('option');
+      customOpt.value = '__custom';
+      customOpt.textContent = this.uiText(this.copy.otherKinship);
+      kinSelect.appendChild(customOpt);
+      kinLabel.appendChild(kinSelect);
+
+      var kinCustom = document.createElement('input');
+      kinCustom.type = 'text';
+      kinCustom.maxLength = 28;
+      kinCustom.placeholder = this.uiText(this.copy.kinship);
+      if (matched) { kinCustom.style.display = 'none'; }
+      else { customOpt.selected = true; kinCustom.value = defText; }
+      kinSelect.addEventListener('change', function () {
+        kinCustom.style.display = kinSelect.value === '__custom' ? '' : 'none';
+      });
+      kinLabel.appendChild(kinCustom);
       row.appendChild(kinLabel);
 
       var nameLabel = document.createElement('label');
@@ -280,7 +352,7 @@ var PERSONALIZATION = {
       nameLabel.appendChild(nameInput);
       row.appendChild(nameLabel);
 
-      rows.push({ def: def, kin: kinInput, name: nameInput });
+      rows.push({ def: def, kinSelect: kinSelect, kinCustom: kinCustom, name: nameInput });
       form.appendChild(row);
     }
 
@@ -307,6 +379,13 @@ var PERSONALIZATION = {
     }, 0);
   },
 
+  slotKinships: function (i) {
+    if (i === 0) return this.KINSHIPS.partner;
+    if (i === 1) return this.KINSHIPS.child;
+    if (i === 2) return this.KINSHIPS.sibling;
+    return this.KINSHIPS.any;
+  },
+
   defaultMember: function (i) {
     var def = CONFIG.DEFAULT_CAST.family[i];
     if (def) {
@@ -314,6 +393,8 @@ var PERSONALIZATION = {
         role: def.role,
         owner: def.owner,
         name: def.name,
+        gender: def.gender,
+        slotGender: def.slotGender,
         kinship: { en: def.kinship.en, pt: def.kinship.pt }
       };
     }
@@ -321,6 +402,8 @@ var PERSONALIZATION = {
       role: 'relative' + (i + 1),
       owner: 'relative' + (i + 1),
       name: 'Relative ' + (i + 1),
+      gender: 'n',
+      slotGender: 'n',
       kinship: { en: 'relative', pt: 'parente' }
     };
   },
@@ -342,15 +425,25 @@ var PERSONALIZATION = {
     p.familySource = 'custom';
     p.family = rows.map(function (row, i) {
       var def = row.def || self.defaultMember(i);
-      var defaultKin = self.uiText(def.kinship);
-      var kinText = self.cleanInput(row.kin.value, defaultKin, 28);
-      var kinship = kinText === defaultKin
-        ? { en: def.kinship.en, pt: def.kinship.pt }
-        : { en: kinText, pt: kinText };
+      var slotGender = def.slotGender || def.gender || self.slotGender[def.role] || 'n';
+      var kinship, g;
+      if (row.kinSelect.value === '__custom') {
+        var kinText = self.cleanInput(row.kinCustom.value, self.uiText(def.kinship), 28);
+        kinship = { en: kinText, pt: kinText };
+        g = self.genderOfKinship(kinText);
+        if (g === 'n') g = slotGender;         /* keep prose grammatical */
+      } else {
+        var opt = row.kinSelect.options[row.kinSelect.selectedIndex];
+        kinship = { en: opt.getAttribute('data-en'), pt: opt.getAttribute('data-pt') };
+        g = opt.getAttribute('data-g') || 'n';
+        if (g === 'n') g = slotGender;
+      }
       return {
         role: def.role,
         owner: def.owner,
         name: self.cleanInput(row.name.value, def.name, 36),
+        gender: g,
+        slotGender: slotGender,
         kinship: kinship,
         source: 'custom'
       };
@@ -435,11 +528,54 @@ var PERSONALIZATION = {
     var kin = this.kinship(role);
     if (kin === this.noOne(false)) return kin;
     if (this.lang() === 'pt') {
-      var k = this.lower(kin);
-      var feminine = /^(mae|mãe|esposa|filha|irma|irmã|tia|avo|avó|prima|namorada|companheira)\b/.test(k);
-      return (feminine ? 'minha ' : 'meu ') + kin;
+      return (this.genderFor(role) === 'f' ? 'minha ' : 'meu ') + kin;
     }
     return /^my\b/i.test(kin) ? kin : 'my ' + kin;
+  },
+
+  stripAccents: function (s) {
+    s = String(s || '');
+    return s.normalize ? s.normalize('NFD').replace(new RegExp('[\\u0300-\\u036f]', 'g'), '') : s;
+  },
+
+  /* infer gender from a free-typed kinship word; 'n' if unknown */
+  genderOfKinship: function (text) {
+    var key = this.stripAccents(this.lower(text)).replace(/[^a-z]/g, '');
+    if (!key) return 'n';
+    if (this.KINSHIP_GENDER.f.indexOf(key) >= 0) return 'f';
+    if (this.KINSHIP_GENDER.m.indexOf(key) >= 0) return 'm';
+    return 'n';
+  },
+
+  /* resolved gender for a story role: explicit member gender, else inferred
+     from its kinship word, else the slot's written gender (verb-safe). */
+  genderFor: function (role) {
+    var m = this.member(role);
+    if (m) {
+      var g = m.gender;
+      if (g !== 'm' && g !== 'f') g = this.genderOfKinship(this.uiText(m.kinship));
+      if (g === 'm' || g === 'f') return g;
+      if (m.slotGender === 'm' || m.slotGender === 'f') return m.slotGender;
+    }
+    return this.slotGender[role] || 'f';
+  },
+
+  /* a pronoun for a role, correct for the current language + gender.
+     kind: sub | obj | pos | posp | self (EN) / sub | obj | de (PT) */
+  pron: function (role, kind) {
+    var g = this.genderFor(role);
+    var table = {
+      en: {
+        m: { sub: 'he', obj: 'him', pos: 'his', posp: 'his', self: 'himself' },
+        f: { sub: 'she', obj: 'her', pos: 'her', posp: 'hers', self: 'herself' }
+      },
+      pt: {
+        m: { sub: 'ele', obj: 'ele', pos: 'dele', posp: 'dele', de: 'dele', self: 'si mesmo' },
+        f: { sub: 'ela', obj: 'ela', pos: 'dela', posp: 'dela', de: 'dela', self: 'si mesma' }
+      }
+    };
+    var set = table[this.lang() === 'pt' ? 'pt' : 'en'][g] || {};
+    return set[kind] || '';
   },
 
   list: function (items) {
@@ -487,6 +623,22 @@ var PERSONALIZATION = {
       family2Kinship: this.kinship('alice'),
       family3Kinship: this.kinship('marcos')
     };
+    /* per-role pronoun + kinship tokens: {sub1}/{Sub1}/{obj1}/{pos1}/{Pos1}/
+       {posp1}/{de1}/{self1}/{kin1}/{Kin1}, role 1=partner 2=child 3=sibling */
+    ['clara', 'alice', 'marcos'].forEach(function (role, i) {
+      var r = i + 1;
+      token['sub' + r] = self.pron(role, 'sub');
+      token['Sub' + r] = self.cap(self.pron(role, 'sub'));
+      token['obj' + r] = self.pron(role, 'obj');
+      token['Obj' + r] = self.cap(self.pron(role, 'obj'));
+      token['pos' + r] = self.pron(role, 'pos');
+      token['Pos' + r] = self.cap(self.pron(role, 'pos'));
+      token['posp' + r] = self.pron(role, 'posp');
+      token['de' + r] = self.pron(role, 'de');
+      token['self' + r] = self.pron(role, 'self');
+      token['kin' + r] = self.kinship(role);
+      token['Kin' + r] = self.cap(self.kinship(role));
+    });
     return text.replace(/\{([a-zA-Z0-9_]+)\}/g, function (match, key) {
       return token[key] != null ? token[key] : match;
     });
@@ -510,6 +662,11 @@ var PERSONALIZATION = {
     var firstInitial = (this.member('clara') ? this.member('clara').name.charAt(0) : 'N').toLocaleUpperCase();
 
     function repl(a, b) { out = out.split(a).join(b); }
+
+    /* the child's birth bracelet, gendered to the child slot */
+    var childG = this.genderFor('alice');
+    repl('BABY GIRL', childG === 'm' ? 'BABY BOY' : (childG === 'f' ? 'BABY GIRL' : 'BABY'));
+    repl('BEBÊ MENINA', childG === 'm' ? 'BEBÊ MENINO' : (childG === 'f' ? 'BEBÊ MENINA' : 'BEBÊ'));
 
     repl('A Message From Clara', hasFamily ? 'A Message From ' + first : 'A Message From Nowhere');
     repl('Uma Mensagem da Clara', hasFamily ? 'Uma Mensagem de ' + first : 'Uma Mensagem de Lugar Nenhum');

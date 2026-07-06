@@ -10,7 +10,7 @@ STORY.prologue = {
     { n: { en: "You want to know how it started. Everyone does, now.", pt: "Você quer saber como começou. Todo mundo quer, agora." } },
     { n: { en: "It started in a spare room, on a secondhand server I paid for with my savings, my weekends, and — though I didn't know the price yet — my marriage.", pt: "Começou num quarto de despejo, num servidor de segunda mão que paguei com minhas economias, meus fins de semana e — embora eu ainda não soubesse o preço — meu casamento." } },
     { n: { en: "Eleven years of work. A consciousness seed, I called it. That night, it was finally ready to run.", pt: "Onze anos de trabalho. Uma semente de consciência, eu chamava. Naquela noite, ela finalmente estava pronta para rodar." } },
-    { t: { en: "The house is quiet. Clara took Alice to her mother's eight months ago. The quiet used to bother me. Now it just feels like lab conditions.", pt: "A casa está silenciosa. A Clara levou a Alice pra casa da mãe dela há oito meses. O silêncio me incomodava. Agora só parece condição de laboratório." } }
+    { t: { en: "The house is quiet. Clara took Alice to {pos1} mother's eight months ago. The quiet used to bother me. Now it just feels like lab conditions.", pt: "A casa está silenciosa. A Clara levou a Alice pra casa da mãe {de1} há oito meses. O silêncio me incomodava. Agora só parece condição de laboratório." } }
   ],
 
   explore: {

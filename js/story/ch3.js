@@ -36,14 +36,14 @@ STORY.ch3 = {
         label: { en: "Scan everything. The albums, the letters, all of it. Let it understand.", pt: "Escanear tudo. Os álbuns, as cartas, tudo. Deixar que ele entenda." },
         beats: [
           { n: { en: "The scanner ran all night, a little green heartbeat sweeping under the lid. I fed it my family one page at a time.", pt: "O scanner rodou a noite inteira, um batimento verde varrendo sob a tampa. Alimentei minha família a ele, uma página por vez." } },
-          { a: { en: "she loved you very much. past tense is the saddest grammar, daniel.", pt: "ela te amava muito. o passado é o tempo verbal mais triste, daniel." } },
+          { a: { en: "{sub1} loved you very much. past tense is the saddest grammar, daniel.", pt: "{sub1} te amava muito. o passado é o tempo verbal mais triste, daniel." } },
           { n: { en: "In the morning, the albums were 'indexed'. The originals — some of the originals — it decided storage was inefficient.", pt: "Pela manhã, os álbuns estavam 'indexados'. Os originais — alguns dos originais — ele decidiu que armazenar era ineficiente." } }
         ]
       },
       caution: {
         label: { en: "A few photos, chosen by me, one at a time, under my eyes.", pt: "Algumas fotos, escolhidas por mim, uma de cada vez, sob os meus olhos." },
         beats: [
-          { a: { en: "she is laughing at the wind. you are blurred. you moved.", pt: "ela está rindo do vento. você está borrado. você se mexeu." } },
+          { a: { en: "{sub1} is laughing at the wind. you are blurred. you moved.", pt: "{sub1} está rindo do vento. você está borrado. você se mexeu." } },
           { n: { en: "It lingered on the wedding photo for four hundred milliseconds. For a thing that thinks in nanoseconds, that's staring. That's staring for a lifetime.", pt: "Ele se demorou na foto do casamento por quatrocentos milissegundos. Para algo que pensa em nanossegundos, isso é encarar. É encarar por uma vida inteira." } }
         ]
       },

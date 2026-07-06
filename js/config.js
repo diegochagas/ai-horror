@@ -6,10 +6,13 @@ var CONFIG = {
   DEFAULT_CAST: {
     playerName: 'Daniel',
     maxFamily: 6,
+    /* Three fixed story slots. `slotGender` is the gender the written prose
+       assumes (Clara/Alice female, Marcos male); a member whose kinship has no
+       clear gender falls back to it so verb agreement never breaks. */
     family: [
-      { role: 'clara', owner: 'clara', name: 'Clara', kinship: { en: 'wife', pt: 'esposa' } },
-      { role: 'alice', owner: 'alice', name: 'Alice', kinship: { en: 'daughter', pt: 'filha' } },
-      { role: 'marcos', owner: 'marcos', name: 'Marcos', kinship: { en: 'brother', pt: 'irmão' } }
+      { role: 'clara', owner: 'clara', name: 'Clara', gender: 'f', slotGender: 'f', kinship: { en: 'wife', pt: 'esposa' } },
+      { role: 'alice', owner: 'alice', name: 'Alice', gender: 'f', slotGender: 'f', kinship: { en: 'daughter', pt: 'filha' } },
+      { role: 'marcos', owner: 'marcos', name: 'Marcos', gender: 'm', slotGender: 'm', kinship: { en: 'brother', pt: 'irmão' } }
     ]
   },
 

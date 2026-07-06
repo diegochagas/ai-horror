@@ -18,7 +18,10 @@ decides how the world ends.
   the ending you're heading toward left him.
 - **Meta-progression** — retellings remember your previous deaths.
 - **Personalized cast** — the first new story can save your name and family, or
-  keep asking later for anything left on the default cast.
+  keep asking later for anything left on the default cast. Each relative's
+  kinship (wife/husband, daughter/son, sister/brother, or your own) carries a
+  gender, and the prose — pronouns and relationship words, in both languages —
+  adapts to it.
 - **English + Português** — toggle on the title screen.
 
 Story inspired by the *E.L.B.E.R.R* analog-horror series ("I Made a Self-Aware
