@@ -298,8 +298,8 @@ var UI = {
 
   setDayLabel: function (day) {
     var label = day == null ? I18N.t('dayUnknown') : (I18N.t('day') + ' ' + day);
-    this.el('rec-day').textContent = label;
-    this.el('hud-day').textContent = label;
+    this.el('rec-day').textContent = label;   /* the VHS timestamp is the single source */
+    this.el('hud-day').textContent = '';
     return label;
   }
 };
