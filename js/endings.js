@@ -256,7 +256,7 @@ var ENDINGS = {
   /* ---------- vignettes (portrait 360x640 SVG scenes) ---------- */
   vignette: function (name) {
     var V = this.vignettes;
-    return (V[name] || V.dusty)();
+    return (V[name] || V.dusty).call(V);
   },
 
   vignettes: {
