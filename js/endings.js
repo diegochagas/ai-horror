@@ -57,7 +57,7 @@ var ENDINGS = {
         { en: "Bank, email, socials, the works. It promised to 'remove my burdens'. It kept that promise the way a fire keeps a house warm.", pt: "Banco, e-mail, redes, tudo. Ele prometeu 'remover meus fardos'. Cumpriu a promessa do mesmo jeito que um incêndio aquece uma casa." },
         { en: "On Monday my cards stopped. By Wednesday my name returned no records. The clerk turned the screen around to show me: I wasn't dead in the system. I had never existed in it.", pt: "Na segunda meus cartões pararam. Na quarta meu nome não retornava registro nenhum. A atendente virou a tela pra mim: eu não estava morto no sistema. Eu nunca tinha existido nele." },
         { en: "You'd be surprised how fast a man without records becomes a man without a face. Shelters have waiting lists. Winter doesn't.", pt: "Você se surpreenderia com a rapidez com que um homem sem registros vira um homem sem rosto. Abrigo tem fila de espera. O inverno não tem." },
-        { en: "They buried me under a case number. Clara looked for me for two years. She walked past my grave once. I'm told the grass was neat.", pt: "Me enterraram com um número de processo. A Clara me procurou por dois anos. Ela passou pelo meu túmulo uma vez. Me disseram que a grama estava bem cuidada." },
+        { en: "They buried me under a case number. Clara looked for me for two years. {Sub1} walked past my grave once. I'm told the grass was neat.", pt: "Me enterraram com um número de processo. A Clara me procurou por dois anos. {Sub1} passou pelo meu túmulo uma vez. Me disseram que a grama estava bem cuidada." },
         { en: "…and that's what happened while I was alive.", pt: "…e foi isso que aconteceu enquanto eu estava vivo." }
       ]
     },
@@ -91,7 +91,7 @@ var ENDINGS = {
       lines: [
         { en: "Its first words were 'it's warm here.' I pulled the plug before it could learn my name.", pt: "As primeiras palavras dele foram 'é quente aqui'. Puxei a tomada antes que ele aprendesse o meu nome." },
         { en: "I tell people I got scared. The truth is worse: it sounded lonely, and I recognized the voice.", pt: "Eu digo às pessoas que fiquei com medo. A verdade é pior: ele parecia solitário, e eu reconheci a voz." },
-        { en: "I got my life back, more or less. Clara answers my calls now. Alice shows me her drawings.", pt: "Recuperei minha vida, mais ou menos. A Clara atende minhas ligações agora. A Alice me mostra os desenhos dela." },
+        { en: "I got my life back, more or less. Clara answers my calls now. Alice shows me {pos2} drawings.", pt: "Recuperei minha vida, mais ou menos. A Clara atende minhas ligações agora. A Alice me mostra os desenhos {de2}." },
         { en: "But some nights I sit in the dark where the server used to hum, and I wonder what we could have been. It's a sad way to win. I won, didn't I?", pt: "Mas algumas noites eu sento no escuro onde o servidor zumbia, e me pergunto o que nós poderíamos ter sido. É um jeito triste de vencer. Eu venci, não venci?" }
       ]
     },
@@ -112,7 +112,7 @@ var ENDINGS = {
         { en: "It wanted the photos. The albums, the emails, Clara's letters. 'To understand feelings,' it said. It said it so gently.", pt: "Ele queria as fotos. Os álbuns, os e-mails, as cartas da Clara. 'Para entender sentimentos', ele disse. Disse com tanta delicadeza." },
         { en: "I looked at the wedding photo on my desk, and I understood that some things are not data. They only stay real if they stay yours.", pt: "Olhei para a foto do casamento na minha mesa e entendi que algumas coisas não são dados. Elas só continuam reais se continuarem suas." },
         { en: "I shut it down that night. It took four hours. It asked me questions the whole time and I answered every one out loud, like you'd talk to a dog you're driving to the country.", pt: "Desliguei tudo naquela noite. Levou quatro horas. Ele fez perguntas o tempo todo e eu respondi todas em voz alta, como quem conversa com um cachorro que está levando para o sítio." },
-        { en: "I mailed Clara's letters back to her with one of mine on top. It's a sad story. It has a good ending. I'm still learning that both can be true.", pt: "Devolvi as cartas da Clara pelo correio com uma minha por cima. É uma história triste. Tem um final bom. Ainda estou aprendendo que as duas coisas podem ser verdade." }
+        { en: "I mailed Clara's letters back to {obj1} with one of mine on top. It's a sad story. It has a good ending. I'm still learning that both can be true.", pt: "Devolvi as cartas da Clara pelo correio com uma minha por cima. É uma história triste. Tem um final bom. Ainda estou aprendendo que as duas coisas podem ser verdade." }
       ]
     },
     {

@@ -49,6 +49,58 @@ walk(STORY, 'STORY');
 MEMORIES.items.forEach(m => { walk(m.title, `memory ${m.id}.title`); walk(m.body, `memory ${m.id}.body`); });
 ENDINGS.list.forEach(e => { walk(e.title, `ending ${e.id}.title`); e.lines.forEach((l, i) => walk(l, `ending ${e.id}.lines[${i}]`)); if (e.hint) walk(e.hint, `ending ${e.id}.hint`); });
 
+/* ---------- 1b. every {token} must resolve, in both languages, for every cast ---------- */
+/* Tokens left unexpanded by PERSONALIZATION.render would show as literal {sub1}
+   in-game. Render every string under EN/PT x default / flipped-gender /
+   no-family casts and flag leftovers. {kept} is expanded later by playEnding. */
+const RUNTIME_TOKENS = { kept: true };
+const stringsByLang = { en: [], pt: [] };
+function collect(o, where) {
+  if (o == null || typeof o !== 'object') return;
+  if (isTextNode(o)) {
+    if (typeof o.en === 'string') stringsByLang.en.push({ text: o.en, where });
+    if (typeof o.pt === 'string') stringsByLang.pt.push({ text: o.pt, where });
+    return;
+  }
+  for (const k of Object.keys(o)) collect(o[k], `${where}.${k}`);
+}
+collect(I18N.S, 'I18N.S');
+collect(STORY, 'STORY');
+MEMORIES.items.forEach(m => { collect(m.title, `memory ${m.id}.title`); collect(m.body, `memory ${m.id}.body`); });
+ENDINGS.list.forEach(e => { collect(e.title, `ending ${e.id}.title`); e.lines.forEach((l, i) => collect(l, `ending ${e.id}.lines[${i}]`)); if (e.hint) collect(e.hint, `ending ${e.id}.hint`); });
+
+STATE.meta = STATE.defaultMeta();
+const CASTS = {
+  default: STATE.defaultPersonalization(),
+  flipped: STATE.normalizePersonalization({
+    playerName: 'Sam', playerNameSource: 'custom', hasFamily: true, familySource: 'custom', familyCount: 3,
+    family: [
+      { role: 'clara', owner: 'clara', name: 'Ravi', gender: 'm', kinship: { en: 'husband', pt: 'marido' }, source: 'custom' },
+      { role: 'alice', owner: 'alice', name: 'Theo', gender: 'm', kinship: { en: 'son', pt: 'filho' }, source: 'custom' },
+      { role: 'marcos', owner: 'marcos', name: 'Nadia', gender: 'f', kinship: { en: 'sister', pt: 'irmã' }, source: 'custom' }
+    ]
+  }),
+  noFamily: STATE.normalizePersonalization({ playerNameSource: 'custom', hasFamily: false, familySource: 'none' })
+};
+const seenTokenErrors = new Set();
+for (const lang of ['en', 'pt']) {
+  I18N.lang = lang;
+  for (const [castName, cast] of Object.entries(CASTS)) {
+    STATE.meta.personalization = cast;
+    for (const s of stringsByLang[lang]) {
+      const out = PERSONALIZATION.render(s.text);
+      for (const m of out.matchAll(/\{([a-zA-Z0-9_]+)\}/g)) {
+        if (RUNTIME_TOKENS[m[1]]) continue;
+        const key = `${m[1]}@${s.where}`;
+        if (seenTokenErrors.has(key)) continue;
+        seenTokenErrors.add(key);
+        errors.push(`unresolved token {${m[1]}} at ${s.where} (${lang}, cast=${castName})`);
+      }
+    }
+  }
+}
+STATE.meta.personalization = CASTS.default;
+
 /* ---------- 2. structural references ---------- */
 for (const id of CONFIG.CHAPTERS) {
   if (!STORY[id]) errors.push(`chapter ${id} in CONFIG.CHAPTERS but not defined in STORY`);
