@@ -240,8 +240,9 @@ var UI = {
     view.classList.remove('hidden');
     var paper = document.createElement('div');
     paper.className = 'memory-paper' + (item.kind === 'photo' ? ' photo' : '');
-    var body = I18N.p(item.body);
-    paper.innerHTML = '<h3>' + I18N.p(item.title) + '</h3>';
+    var resolved = MEMORIES.resolve(item);   /* kinship-specific variant */
+    var body = I18N.p(resolved.body);
+    paper.innerHTML = '<h3>' + I18N.p(resolved.title) + '</h3>';
     body.split('\n').forEach(function (line) {
       var p = document.createElement('p');
       p.textContent = line;

@@ -32,6 +32,7 @@ var STATE = {
           name: m.name,
           gender: m.gender,
           slotGender: m.slotGender,
+          cat: m.cat,
           kinship: { en: m.kinship.en, pt: m.kinship.pt },
           source: 'default'
         };
@@ -55,29 +56,35 @@ var STATE = {
       return {
         role: 'relative' + (i + 1),
         owner: 'relative' + (i + 1),
-        name: 'Relative ' + (i + 1),
-        gender: 'n',
-        slotGender: 'n',
-        kinship: { en: 'relative', pt: 'parente' }
+        name: 'Friend ' + (i - 2),
+        gender: 'm',
+        slotGender: 'm',
+        cat: 'friend',
+        kinship: { en: 'friend', pt: 'amigo' }
       };
     }
     function gender(value, fallback) {
       return (value === 'm' || value === 'f' || value === 'n') ? value : fallback;
     }
+    var CATS = ['partner', 'parent', 'grandparent', 'child', 'sibling', 'friend'];
+    function category(value, member, def) {
+      if (CATS.indexOf(value) >= 0) return value;
+      /* legacy saves: infer from the kinship word, else keep the slot's role */
+      if (typeof PERSONALIZATION !== 'undefined' && member && member.kinship) {
+        var inferred = PERSONALIZATION.inferCategory(member.kinship.en || member.kinship.pt);
+        if (inferred) return inferred;
+      }
+      return def.cat || 'friend';
+    }
 
     base.playerName = nonEmpty(src.playerName, base.playerName);
     base.playerNameSource = source(src.playerNameSource);
 
-    if (src.hasFamily === false || src.familySource === 'none') {
-      base.hasFamily = false;
-      base.familySource = 'none';
-      base.familyCount = 0;
-      base.family = [];
-      return base;
-    }
-
+    /* there is no "no family" mode: a legacy 'none' save falls back to the
+       default cast (familySource 'default'), so setup asks again */
     base.hasFamily = true;
-    base.familySource = source(src.familySource);
+    base.familySource = (src.hasFamily === false || src.familySource === 'none')
+      ? 'default' : source(src.familySource);
 
     var requested = parseInt(src.familyCount, 10);
     if (!isFinite(requested) || requested < 1) {
@@ -92,7 +99,7 @@ var STATE = {
       var item = family[i] || {};
       var kin = item.kinship || {};
       var defKin = def.kinship || { en: 'relative', pt: 'parente' };
-      base.family.push({
+      var member = {
         role: item.role || def.role,
         owner: item.owner || def.owner,
         name: nonEmpty(item.name, def.name),
@@ -103,7 +110,9 @@ var STATE = {
           pt: nonEmpty(kin.pt, defKin.pt)
         },
         source: source(item.source)
-      });
+      };
+      member.cat = category(item.cat, member, def);
+      base.family.push(member);
     }
     base.familyCount = base.family.length;
     return base;

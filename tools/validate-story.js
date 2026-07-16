@@ -75,12 +75,26 @@ const CASTS = {
   flipped: STATE.normalizePersonalization({
     playerName: 'Sam', playerNameSource: 'custom', hasFamily: true, familySource: 'custom', familyCount: 3,
     family: [
-      { role: 'clara', owner: 'clara', name: 'Ravi', gender: 'm', kinship: { en: 'husband', pt: 'marido' }, source: 'custom' },
-      { role: 'alice', owner: 'alice', name: 'Theo', gender: 'm', kinship: { en: 'son', pt: 'filho' }, source: 'custom' },
-      { role: 'marcos', owner: 'marcos', name: 'Nadia', gender: 'f', kinship: { en: 'sister', pt: 'irmã' }, source: 'custom' }
+      { role: 'clara', owner: 'clara', name: 'Ravi', gender: 'm', cat: 'partner', kinship: { en: 'husband', pt: 'marido' }, source: 'custom' },
+      { role: 'alice', owner: 'alice', name: 'Theo', gender: 'm', cat: 'child', kinship: { en: 'son', pt: 'filho' }, source: 'custom' },
+      { role: 'marcos', owner: 'marcos', name: 'Nadia', gender: 'f', cat: 'sibling', kinship: { en: 'sister', pt: 'irmã' }, source: 'custom' }
     ]
   }),
-  noFamily: STATE.normalizePersonalization({ playerNameSource: 'custom', hasFamily: false, familySource: 'none' })
+  elders: STATE.normalizePersonalization({
+    playerName: 'Sam', playerNameSource: 'custom', hasFamily: true, familySource: 'custom', familyCount: 3,
+    family: [
+      { role: 'clara', owner: 'clara', name: 'Jorge', gender: 'm', cat: 'parent', kinship: { en: 'father', pt: 'pai' }, source: 'custom' },
+      { role: 'alice', owner: 'alice', name: 'Berta', gender: 'f', cat: 'grandparent', kinship: { en: 'grandmother', pt: 'avó' }, source: 'custom' },
+      { role: 'marcos', owner: 'marcos', name: 'Paula', gender: 'f', cat: 'friend', kinship: { en: 'friend', pt: 'amiga' }, source: 'custom' }
+    ]
+  }),
+  allFriends: STATE.normalizePersonalization({
+    playerName: 'Sam', playerNameSource: 'custom', hasFamily: true, familySource: 'custom', familyCount: 2,
+    family: [
+      { role: 'clara', owner: 'clara', name: 'Rui', gender: 'm', cat: 'friend', kinship: { en: 'friend', pt: 'amigo' }, source: 'custom' },
+      { role: 'alice', owner: 'alice', name: 'Lia', gender: 'f', cat: 'friend', kinship: { en: 'friend', pt: 'amiga' }, source: 'custom' }
+    ]
+  })
 };
 const seenTokenErrors = new Set();
 for (const lang of ['en', 'pt']) {
@@ -134,6 +148,19 @@ for (const m of MEMORIES.items) {
   if (n > 1) errors.push(`memory ${m.id} placed ${n} times`);
 }
 if (MEMORIES.items.length !== 10) warn.push(`expected 10 memories, found ${MEMORIES.items.length}`);
+
+/* every owner-bound memory must cover all relationship categories:
+   base text serves its canonical category, variants the other four */
+const CANONICAL = { clara: 'partner', alice: 'child', marcos: 'sibling' };
+const MEM_CATS = ['partner', 'child', 'sibling', 'elder', 'friend'];
+for (const m of MEMORIES.items) {
+  if (m.owner === 'family' || m.universal) continue;
+  for (const cat of MEM_CATS) {
+    if (cat === CANONICAL[m.owner]) continue;
+    const v = m.variants && m.variants[cat];
+    if (!v || !v.title || !v.body) errors.push(`memory ${m.id} is missing the '${cat}' variant`);
+  }
+}
 
 /* ---------- 3. reachability: brute-force every choice path ---------- */
 const reachable = new Set();

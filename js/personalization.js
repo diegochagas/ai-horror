@@ -7,38 +7,36 @@ var PERSONALIZATION = {
      m<->f swaps never touch, but neutral 'they' would) always stays correct. */
   slotGender: { clara: 'f', alice: 'f', marcos: 'm' },
 
-  /* Curated kinship options per slot (0 partner, 1 child, 2 sibling, 3+ any).
-     Each carries an explicit gender so adaptation never has to guess. */
-  KINSHIPS: {
-    partner: [
-      { g: 'f', en: 'wife', pt: 'esposa' },
-      { g: 'm', en: 'husband', pt: 'marido' },
-      { g: 'n', en: 'partner', pt: 'parceiro(a)' }
-    ],
-    child: [
-      { g: 'f', en: 'daughter', pt: 'filha' },
-      { g: 'm', en: 'son', pt: 'filho' },
-      { g: 'n', en: 'child', pt: 'filho(a)' }
-    ],
-    sibling: [
-      { g: 'f', en: 'sister', pt: 'irmã' },
-      { g: 'm', en: 'brother', pt: 'irmão' },
-      { g: 'n', en: 'sibling', pt: 'irmão(ã)' }
-    ],
-    any: [
-      { g: 'f', en: 'mother', pt: 'mãe' },
-      { g: 'm', en: 'father', pt: 'pai' },
-      { g: 'f', en: 'daughter', pt: 'filha' },
-      { g: 'm', en: 'son', pt: 'filho' },
-      { g: 'f', en: 'sister', pt: 'irmã' },
-      { g: 'm', en: 'brother', pt: 'irmão' },
-      { g: 'f', en: 'grandmother', pt: 'avó' },
-      { g: 'm', en: 'grandfather', pt: 'avô' },
-      { g: 'f', en: 'aunt', pt: 'tia' },
-      { g: 'm', en: 'uncle', pt: 'tio' },
-      { g: 'n', en: 'cousin', pt: 'primo(a)' },
-      { g: 'n', en: 'friend', pt: 'amigo(a)' }
-    ]
+  /* Every slot offers the full kinship list. Each option carries an explicit
+     gender and a relationship category (`cat`) that selects which variant of
+     each memory the story shows. `word` (when present) is the prose noun,
+     distinct from the dropdown label. */
+  KINSHIPS: [
+    { cat: 'partner',     g: 'f', en: 'wife', pt: 'esposa' },
+    { cat: 'partner',     g: 'm', en: 'husband', pt: 'marido' },
+    { cat: 'partner',     g: 'n', en: 'partner', pt: 'parceiro(a)' },
+    { cat: 'parent',      g: 'f', en: 'mother', pt: 'mãe' },
+    { cat: 'parent',      g: 'm', en: 'father', pt: 'pai' },
+    { cat: 'grandparent', g: 'f', en: 'grandmother', pt: 'avó' },
+    { cat: 'grandparent', g: 'm', en: 'grandfather', pt: 'avô' },
+    { cat: 'child',       g: 'f', en: 'daughter', pt: 'filha' },
+    { cat: 'child',       g: 'm', en: 'son', pt: 'filho' },
+    { cat: 'sibling',     g: 'f', en: 'sister', pt: 'irmã' },
+    { cat: 'sibling',     g: 'm', en: 'brother', pt: 'irmão' },
+    { cat: 'friend',      g: 'f', en: 'friend (she)', pt: 'amiga', word: { en: 'friend', pt: 'amiga' } },
+    { cat: 'friend',      g: 'm', en: 'friend (he)', pt: 'amigo', word: { en: 'friend', pt: 'amigo' } }
+  ],
+
+  CATS: ['partner', 'parent', 'grandparent', 'child', 'sibling', 'friend'],
+
+  /* category lookup for free-typed kinship words (EN + PT, accent-insensitive) */
+  KINSHIP_CAT: {
+    partner: ['wife', 'husband', 'partner', 'spouse', 'girlfriend', 'boyfriend', 'esposa', 'marido', 'companheira', 'companheiro', 'parceira', 'parceiro', 'namorada', 'namorado', 'mulher', 'esposo'],
+    parent: ['mother', 'father', 'mom', 'mum', 'dad', 'mommy', 'daddy', 'mae', 'pai', 'mamae', 'papai'],
+    grandparent: ['grandmother', 'grandfather', 'grandma', 'grandpa', 'granny', 'avo', 'vovo', 'vo', 'vovoa'],
+    child: ['daughter', 'son', 'child', 'kid', 'filha', 'filho', 'crianca'],
+    sibling: ['sister', 'brother', 'sibling', 'irma', 'irmao'],
+    friend: ['friend', 'buddy', 'pal', 'amiga', 'amigo', 'colega']
   },
 
   /* gender lookup for free-typed kinship words (EN + PT, accent-insensitive) */
@@ -56,20 +54,13 @@ var PERSONALIZATION = {
     yourName: { en: 'Your name', pt: 'Seu nome' },
     saveName: { en: 'Save my name', pt: 'Salvar meu nome' },
     useDefaultName: { en: 'Use Daniel for now', pt: 'Usar Daniel por enquanto' },
-    familyTitle: { en: 'Do you have family?', pt: 'Você tem família?' },
-    familyHint: {
-      en: 'The default story remembers Clara, Alice, and Marcos. You can replace them with your own people.',
-      pt: 'A história padrão lembra Clara, Alice e Marcos. Você pode trocar por pessoas suas.'
-    },
-    yesFamily: { en: 'Yes', pt: 'Sim' },
-    noFamily: { en: 'No', pt: 'Não' },
-    useDefaultFamily: { en: 'Use default family for now', pt: 'Usar família padrão por enquanto' },
-    familyCountTitle: { en: 'How many family members?', pt: 'Quantos familiares?' },
+    useDefaultFamily: { en: 'Use the default cast for now', pt: 'Usar o elenco padrão por enquanto' },
+    familyCountTitle: { en: 'Who is in your life?', pt: 'Quem faz parte da sua vida?' },
     familyCountHint: {
-      en: 'The story can remember up to six names. The first three fill the original Clara, Alice, and Marcos story roles.',
-      pt: 'A história pode lembrar até seis nomes. Os três primeiros ocupam os papéis originais de Clara, Alice e Marcos.'
+      en: 'The story needs at least one person — family or friends, up to six. Partners, parents, grandparents, children, siblings and friends all reshape the memories you will find.',
+      pt: 'A história precisa de pelo menos uma pessoa — família ou amigos, até seis. Cônjuges, pais, avós, filhos, irmãos e amigos mudam as memórias que você vai encontrar.'
     },
-    familyCount: { en: 'Family members', pt: 'Familiares' },
+    familyCount: { en: 'People', pt: 'Pessoas' },
     continue: { en: 'Continue', pt: 'Continuar' },
     back: { en: 'Back', pt: 'Voltar' },
     familyMembersTitle: { en: 'Name your family', pt: 'Nomeie sua família' },
@@ -123,7 +114,7 @@ var PERSONALIZATION = {
     UI.el('rec-day').textContent = '';
 
     function familyStep() {
-      if (self.needsFamily()) self.renderFamilyChoice(onDone, onCancel);
+      if (self.needsFamily()) self.renderFamilyCount(onDone, onCancel);
       else onDone();
     }
 
@@ -223,31 +214,6 @@ var PERSONALIZATION = {
     setTimeout(function () { input.focus(); input.select(); }, 0);
   },
 
-  renderFamilyChoice: function (done, cancel) {
-    var self = this;
-    var panel = this.panel(this.copy.familyTitle, this.copy.familyHint, cancel);
-    var actions = document.createElement('div');
-    actions.className = 'personal-actions stacked';
-    actions.appendChild(this.button(this.copy.yesFamily, function () {
-      self.renderFamilyCount(done, cancel);
-    }));
-    actions.appendChild(this.button(this.copy.noFamily, function () {
-      var p = self.data();
-      p.hasFamily = false;
-      p.familySource = 'none';
-      p.familyCount = 0;
-      p.family = [];
-      self.saveData(p);
-      done();
-    }));
-    actions.appendChild(this.button(this.copy.useDefaultFamily, function () {
-      self.saveDefaultFamily();
-      done();
-    }, true));
-    actions.appendChild(this.button(this.copy.cancel, cancel, true));
-    panel.appendChild(actions);
-  },
-
   renderFamilyCount: function (done, cancel) {
     var self = this;
     var data = this.data();
@@ -274,12 +240,14 @@ var PERSONALIZATION = {
       if (!isFinite(count)) count = CONFIG.DEFAULT_CAST.family.length;
       count = Math.max(1, Math.min(CONFIG.DEFAULT_CAST.maxFamily, count));
       self.renderFamilyMembers(count, done, function () {
-        self.renderFamilyChoice(done, cancel);
+        self.renderFamilyCount(done, cancel);
       });
     }));
-    actions.appendChild(this.button(this.copy.back, function () {
-      self.renderFamilyChoice(done, cancel);
+    actions.appendChild(this.button(this.copy.useDefaultFamily, function () {
+      self.saveDefaultFamily();
+      done();
     }, true));
+    actions.appendChild(this.button(this.copy.cancel, cancel, true));
     form.appendChild(actions);
 
     form.addEventListener('submit', function (e) {
@@ -312,14 +280,12 @@ var PERSONALIZATION = {
       var kinSelect = document.createElement('select');
       var defText = this.uiText(def.kinship);
       var matched = false;
-      this.slotKinships(i).forEach(function (opt) {
+      this.KINSHIPS.forEach(function (opt, idx) {
+        var word = opt.word || opt;
         var o = document.createElement('option');
-        o.value = opt.en;
+        o.value = String(idx);
         o.textContent = self.uiText({ en: opt.en, pt: opt.pt });
-        o.setAttribute('data-g', opt.g);
-        o.setAttribute('data-en', opt.en);
-        o.setAttribute('data-pt', opt.pt);
-        if (!matched && (opt.en === (def.kinship && def.kinship.en) || self.uiText({ en: opt.en, pt: opt.pt }) === defText)) {
+        if (!matched && (word.en === (def.kinship && def.kinship.en) || self.uiText(word) === defText)) {
           o.selected = true; matched = true;
         }
         kinSelect.appendChild(o);
@@ -379,13 +345,6 @@ var PERSONALIZATION = {
     }, 0);
   },
 
-  slotKinships: function (i) {
-    if (i === 0) return this.KINSHIPS.partner;
-    if (i === 1) return this.KINSHIPS.child;
-    if (i === 2) return this.KINSHIPS.sibling;
-    return this.KINSHIPS.any;
-  },
-
   defaultMember: function (i) {
     var def = CONFIG.DEFAULT_CAST.family[i];
     if (def) {
@@ -395,16 +354,18 @@ var PERSONALIZATION = {
         name: def.name,
         gender: def.gender,
         slotGender: def.slotGender,
+        cat: def.cat,
         kinship: { en: def.kinship.en, pt: def.kinship.pt }
       };
     }
     return {
       role: 'relative' + (i + 1),
       owner: 'relative' + (i + 1),
-      name: 'Relative ' + (i + 1),
-      gender: 'n',
-      slotGender: 'n',
-      kinship: { en: 'relative', pt: 'parente' }
+      name: 'Friend ' + (i - 2),
+      gender: 'm',
+      slotGender: 'm',
+      cat: 'friend',
+      kinship: { en: 'friend', pt: 'amigo' }
     };
   },
 
@@ -426,17 +387,19 @@ var PERSONALIZATION = {
     p.family = rows.map(function (row, i) {
       var def = row.def || self.defaultMember(i);
       var slotGender = def.slotGender || def.gender || self.slotGender[def.role] || 'n';
-      var kinship, g;
+      var kinship, g, cat;
       if (row.kinSelect.value === '__custom') {
         var kinText = self.cleanInput(row.kinCustom.value, self.uiText(def.kinship), 28);
         kinship = { en: kinText, pt: kinText };
         g = self.genderOfKinship(kinText);
         if (g === 'n') g = slotGender;         /* keep prose grammatical */
+        cat = self.inferCategory(kinText) || def.cat || 'friend';
       } else {
-        var opt = row.kinSelect.options[row.kinSelect.selectedIndex];
-        kinship = { en: opt.getAttribute('data-en'), pt: opt.getAttribute('data-pt') };
-        g = opt.getAttribute('data-g') || 'n';
-        if (g === 'n') g = slotGender;
+        var opt = self.KINSHIPS[parseInt(row.kinSelect.value, 10)] || self.KINSHIPS[0];
+        var word = opt.word || opt;
+        kinship = { en: word.en, pt: word.pt };
+        g = opt.g === 'n' ? slotGender : opt.g;
+        cat = opt.cat;
       }
       return {
         role: def.role,
@@ -444,6 +407,7 @@ var PERSONALIZATION = {
         name: self.cleanInput(row.name.value, def.name, 36),
         gender: g,
         slotGender: slotGender,
+        cat: cat,
         kinship: kinship,
         source: 'custom'
       };
@@ -453,6 +417,26 @@ var PERSONALIZATION = {
   },
 
   /* ---------- story rendering ---------- */
+
+  /* Small category-dependent phrases woven into fixed story lines.
+     `intimate` = the recurring message slot-1 always sent (ch3 death);
+     `memento` = what slot-2's drawing-type memory physically is (route C). */
+  STORY_BITS: {
+    intimate: {
+      partner: { en: "'come to bed'", pt: "'vem dormir'" },
+      child:   { en: "'goodnight'", pt: "'boa noite'" },
+      sibling: { en: "'answer your phone'", pt: "'atende o telefone'" },
+      elder:   { en: "'eat something'", pt: "'come alguma coisa'" },
+      friend:  { en: "'you owe me a beer'", pt: "'você me deve uma cerveja'" }
+    },
+    memento: {
+      child:   { en: 'a crayon drawing of stick figures and a smiling robot', pt: 'um desenho a giz de cera de bonecos de palito com um robô sorridente' },
+      partner: { en: 'a whiteboard doodle of two robots holding hands', pt: 'um rabisco de dois robôs de mãos dadas' },
+      sibling: { en: 'a felt-pen map with an X where a time capsule sleeps', pt: 'um mapa a caneta com um X onde dorme uma cápsula do tempo' },
+      elder:   { en: 'a pencil sketch of a treehouse that was never built', pt: 'um esboço a lápis de uma casa na árvore que nunca foi construída' },
+      friend:  { en: 'a bar napkin with two houses and a robot mowing both lawns', pt: 'um guardanapo de bar com duas casas e um robô cortando os dois gramados' }
+    }
+  },
 
   render: function (text) {
     if (!text) return text;
@@ -547,6 +531,35 @@ var PERSONALIZATION = {
     return 'n';
   },
 
+  /* infer relationship category from a free-typed kinship word; null if unknown */
+  inferCategory: function (text) {
+    var key = this.stripAccents(this.lower(text)).replace(/[^a-z]/g, '');
+    if (!key) return null;
+    for (var cat in this.KINSHIP_CAT) {
+      if (this.KINSHIP_CAT[cat].indexOf(key) >= 0) return cat;
+    }
+    return null;
+  },
+
+  /* relationship category for a story role (slot defaults keep prose coherent) */
+  slotCat: { clara: 'partner', alice: 'child', marcos: 'sibling' },
+  catFor: function (role) {
+    var m = this.member(role);
+    if (m) {
+      if (this.CATS.indexOf(m.cat) >= 0) return m.cat;
+      var inferred = this.inferCategory(this.uiText(m.kinship));
+      if (inferred) return inferred;
+    }
+    return this.slotCat[role] || 'friend';
+  },
+
+  /* memory-variant category: parents and grandparents share the 'elder' texts */
+  memoryCat: function (role) {
+    var cat = this.catFor(role);
+    if (cat === 'parent' || cat === 'grandparent') return 'elder';
+    return cat;
+  },
+
   /* resolved gender for a story role: explicit member gender, else inferred
      from its kinship word, else the slot's written gender (verb-safe). */
   genderFor: function (role) {
@@ -624,7 +637,7 @@ var PERSONALIZATION = {
       family3Kinship: this.kinship('marcos')
     };
     /* per-role pronoun + kinship tokens: {sub1}/{Sub1}/{obj1}/{pos1}/{Pos1}/
-       {posp1}/{de1}/{self1}/{kin1}/{Kin1}, role 1=partner 2=child 3=sibling */
+       {posp1}/{de1}/{self1}/{kin1}/{Kin1}, roles 1..3 = the three story slots */
     ['clara', 'alice', 'marcos'].forEach(function (role, i) {
       var r = i + 1;
       token['sub' + r] = self.pron(role, 'sub');
@@ -638,7 +651,13 @@ var PERSONALIZATION = {
       token['self' + r] = self.pron(role, 'self');
       token['kin' + r] = self.kinship(role);
       token['Kin' + r] = self.cap(self.kinship(role));
+      token['myKin' + r] = self.myKinship(role);
+      token['MyKin' + r] = self.cap(self.myKinship(role));
     });
+    /* category-dependent story tokens */
+    var lang = this.lang() === 'pt' ? 'pt' : 'en';
+    token.intimate1 = (this.STORY_BITS.intimate[this.memoryCat('clara')] || this.STORY_BITS.intimate.partner)[lang];
+    token.memento2 = (this.STORY_BITS.memento[this.memoryCat('alice')] || this.STORY_BITS.memento.child)[lang];
     return text.replace(/\{([a-zA-Z0-9_]+)\}/g, function (match, key) {
       return token[key] != null ? token[key] : match;
     });
@@ -647,19 +666,17 @@ var PERSONALIZATION = {
   replacePhrases: function (text) {
     var out = text;
     var p = this.profile();
-    var hasFamily = p.hasFamily;
     var names = this.familyNames();
     var familyList = this.familyList();
     var familyListLower = this.familyList(null, true);
     var first = this.nameFor('clara');
     var second = this.nameFor('alice');
     var third = this.nameFor('marcos');
-    var countWithMe = hasFamily ? p.family.length + 1 : 1;
-    var countWord = this.numberWord(countWithMe);
+    var countWord = this.numberWord(p.family.length + 1);
     var countWordCap = this.cap(countWord);
-    var familyAndMe = hasFamily ? this.list(names.concat(['me'])) : 'me';
-    var familyAndMePt = hasFamily ? this.list(names.concat(['eu'])) : 'eu';
-    var firstInitial = (this.member('clara') ? this.member('clara').name.charAt(0) : 'N').toLocaleUpperCase();
+    var familyAndMe = this.list(names.concat(['me']));
+    var familyAndMePt = this.list(names.concat(['eu']));
+    var firstInitial = (this.member('clara') ? this.member('clara').name.charAt(0) : 'C').toLocaleUpperCase();
 
     function repl(a, b) { out = out.split(a).join(b); }
 
@@ -668,14 +685,14 @@ var PERSONALIZATION = {
     repl('BABY GIRL', childG === 'm' ? 'BABY BOY' : (childG === 'f' ? 'BABY GIRL' : 'BABY'));
     repl('BEBÊ MENINA', childG === 'm' ? 'BEBÊ MENINO' : (childG === 'f' ? 'BEBÊ MENINA' : 'BEBÊ'));
 
-    repl('A Message From Clara', hasFamily ? 'A Message From ' + first : 'A Message From Nowhere');
-    repl('Uma Mensagem da Clara', hasFamily ? 'Uma Mensagem de ' + first : 'Uma Mensagem de Lugar Nenhum');
-    repl('Embers — Clara', hasFamily ? 'Embers — ' + first : 'Embers — The Letter');
-    repl('Brasas — Clara', hasFamily ? 'Brasas — ' + first : 'Brasas — A Carta');
-    repl('Embers — Alice', hasFamily ? 'Embers — ' + second : 'Embers — The Drawing');
-    repl('Brasas — Alice', hasFamily ? 'Brasas — ' + second : 'Brasas — O Desenho');
-    repl('Embers — Marcos', hasFamily ? 'Embers — ' + third : 'Embers — The Voice');
-    repl('Brasas — Marcos', hasFamily ? 'Brasas — ' + third : 'Brasas — A Voz');
+    repl('A Message From Clara', 'A Message From ' + first);
+    repl('Uma Mensagem da Clara', 'Uma Mensagem de ' + first);
+    repl('Embers — Clara', 'Embers — ' + first);
+    repl('Brasas — Clara', 'Brasas — ' + first);
+    repl('Embers — Alice', 'Embers — ' + second);
+    repl('Brasas — Alice', 'Brasas — ' + second);
+    repl('Embers — Marcos', 'Embers — ' + third);
+    repl('Brasas — Marcos', 'Brasas — ' + third);
 
     repl('Clara, Alice and Marcos', familyList);
     repl('clara and alice and marcos', familyListLower);
@@ -683,46 +700,28 @@ var PERSONALIZATION = {
     repl('Clara e Alice', this.list(this.familyNames(2)));
     repl('Clara, Alice, Marcos and me', familyAndMe);
     repl('Clara, Alice, Marcos e eu', familyAndMePt);
-    repl('a woman named Clara', hasFamily ? 'someone named ' + first : 'someone with my eyes');
-    repl('uma mulher chamada Clara', hasFamily ? 'alguém chamado ' + first : 'alguém com os meus olhos');
+    repl('a woman named Clara', 'someone named ' + first);
+    repl('uma mulher chamada Clara', 'alguém chamado ' + first);
 
-    repl('The four of us', hasFamily ? 'The ' + countWord + ' of us' : 'Me alone');
-    repl('the four of us', hasFamily ? 'the ' + countWord + ' of us' : 'me alone');
-    repl('Nós quatro', hasFamily ? 'Nós ' + countWord : 'Eu, sozinho');
-    repl('nós quatro', hasFamily ? 'nós ' + countWord : 'eu, sozinho');
-    repl('Four stick figures', hasFamily ? countWordCap + ' stick figures' : 'One stick figure');
-    repl('four stick figures', hasFamily ? countWord + ' stick figures' : 'one stick figure');
-    repl('Quatro bonecos de palito', hasFamily ? countWordCap + ' bonecos de palito' : 'Um boneco de palito');
-    repl('quatro bonecos de palito', hasFamily ? countWord + ' bonecos de palito' : 'um boneco de palito');
-    repl('The last time everyone was in the same room.', hasFamily ? 'The last time everyone was in the same room.' : 'The last proof that the room had ever held more than the machine and me.');
-    repl('A última vez que todo mundo esteve na mesma sala.', hasFamily ? 'A última vez que todo mundo esteve na mesma sala.' : 'A última prova de que aquela sala já tinha guardado algo além da máquina e de mim.');
-    repl('All of us in one frame', hasFamily ? 'All of us in one frame' : 'Me in one frame');
-    repl('Todos nós num quadro só', hasFamily ? 'Todos nós num quadro só' : 'Eu num quadro só');
+    repl('The four of us', 'The ' + countWord + ' of us');
+    repl('the four of us', 'the ' + countWord + ' of us');
+    repl('Nós quatro', 'Nós ' + countWord);
+    repl('nós quatro', 'nós ' + countWord);
+    repl('Four stick figures', countWordCap + ' stick figures');
+    repl('four stick figures', countWord + ' stick figures');
+    repl('Quatro bonecos de palito', countWordCap + ' bonecos de palito');
+    repl('quatro bonecos de palito', countWord + ' bonecos de palito');
 
-    if (!hasFamily) {
-      repl('my marriage', 'the life I kept postponing');
-      repl('meu casamento', 'a vida que eu continuava adiando');
-      repl('The house is quiet. Clara took Alice to her mother\'s eight months ago.', 'The house is quiet. It has always been quiet. No one left; there was only less and less of me in it.');
-      repl('A casa está silenciosa. A Clara levou a Alice pra casa da mãe dela há oito meses.', 'A casa está silenciosa. Sempre foi silenciosa. Ninguém foi embora; só havia cada vez menos de mim nela.');
-      repl('my family', 'what I had left');
-      repl('minha família', 'o que me restava');
-      repl('the whole family', 'everything I had left');
-      repl('a família inteira', 'tudo o que me restava');
-      repl('his family', 'his empty house');
-      repl('a própria família', 'a própria vida');
-      repl('the family you lost', 'the life you lost');
-      repl('a family', 'someone');
-      repl('uma família', 'alguém');
-      repl('That\'s how this family works', 'That is how loneliness works');
-      repl('É assim que essa família funciona', 'É assim que a solidão funciona');
-      repl('I never found them.', 'I never found a way back.');
-      repl('Nunca encontrei os três.', 'Nunca encontrei um caminho de volta.');
-      repl("It's a common name.", 'It was probably another ghost.');
-      repl('É um nome comum.', 'Provavelmente era outro fantasma.');
-      repl('I kept nothing of them.', 'I kept nothing of myself.');
-      repl('Não guardei nada deles.', 'Não guardei nada de mim.');
-      repl('Her mother is listed at a camp in the mountains.', 'There is a camp in the mountains.');
-      repl('A mãe dela está listada num acampamento nas montanhas.', 'Existe um acampamento nas montanhas.');
+    /* a cast made only of friends isn't "family" — soften the word */
+    var allFriends = p.family.length > 0 && p.family.every(function (m) { return (m.cat || 'friend') === 'friend'; });
+    if (allFriends) {
+      repl('my family', 'my friends');
+      repl('minha família', 'meus amigos');
+      repl('his family', 'his people');
+      repl('a própria família', 'os próprios amigos');
+      repl('the family you lost', 'the people you lost');
+      repl('for the family', 'for all of us');
+      repl('para a família', 'para todos nós');
     }
 
     repl('my brother', this.myKinship('marcos'));

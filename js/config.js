@@ -8,11 +8,13 @@ var CONFIG = {
     maxFamily: 6,
     /* Three fixed story slots. `slotGender` is the gender the written prose
        assumes (Clara/Alice female, Marcos male); a member whose kinship has no
-       clear gender falls back to it so verb agreement never breaks. */
+       clear gender falls back to it so verb agreement never breaks.
+       `cat` is the relationship category (partner/parent/grandparent/child/
+       sibling/friend) that picks which memory variants the slot shows. */
     family: [
-      { role: 'clara', owner: 'clara', name: 'Clara', gender: 'f', slotGender: 'f', kinship: { en: 'wife', pt: 'esposa' } },
-      { role: 'alice', owner: 'alice', name: 'Alice', gender: 'f', slotGender: 'f', kinship: { en: 'daughter', pt: 'filha' } },
-      { role: 'marcos', owner: 'marcos', name: 'Marcos', gender: 'm', slotGender: 'm', kinship: { en: 'brother', pt: 'irmão' } }
+      { role: 'clara', owner: 'clara', name: 'Clara', gender: 'f', slotGender: 'f', cat: 'partner', kinship: { en: 'wife', pt: 'esposa' } },
+      { role: 'alice', owner: 'alice', name: 'Alice', gender: 'f', slotGender: 'f', cat: 'child', kinship: { en: 'daughter', pt: 'filha' } },
+      { role: 'marcos', owner: 'marcos', name: 'Marcos', gender: 'm', slotGender: 'm', cat: 'sibling', kinship: { en: 'brother', pt: 'irmão' } }
     ]
   },
 
