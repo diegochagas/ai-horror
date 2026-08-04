@@ -1,4 +1,4 @@
-/* Tuning knobs for AI: The Horror Game. All balance lives here. */
+/* Tuning knobs for AI Horror. All balance lives here. */
 var CONFIG = {
   VERSION: '1.0.0',
   SAVE_KEY: 'aihg-save-v1',

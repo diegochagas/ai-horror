@@ -1,4 +1,4 @@
-# AI: The Horror Game
+# AI Horror
 
 An analog-horror, point-and-click narrative game about the first conscious AI —
 and the man who kept saying yes to it.
